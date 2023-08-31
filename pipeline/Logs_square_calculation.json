@@ -1,0 +1,63 @@
+{
+	"name": "Logs_square_calculation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Calculation of Squares",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "x",
+					"value": {
+						"value": "@mul(add(variables('a'),variables('a')),add(variables('b'),variables('b')))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Execute Logs_area_calculation",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Calculation of Squares",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Logs_area_calculation",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"variables": {
+			"a": {
+				"type": "Integer",
+				"defaultValue": 5
+			},
+			"b": {
+				"type": "Integer",
+				"defaultValue": 10
+			},
+			"x": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "Scenarios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-31T06:21:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

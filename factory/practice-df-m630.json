@@ -1,0 +1,9 @@
+{
+	"name": "practice-df-m630",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6baee8fd-10b8-460a-9b95-f46d8292b5a2",
+		"tenantId": "01b9b8a6-abec-4958-8afa-2d21143366eb"
+	}
+}

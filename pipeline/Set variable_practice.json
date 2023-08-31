@@ -1,0 +1,43 @@
+{
+	"name": "Set variable_practice",
+	"properties": {
+		"activities": [
+			{
+				"name": "Calculate Square of the a plus b",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "X",
+					"value": {
+						"value": "@add(add(mul(variables('a'),variables('a')),mul(variables('b'),variables('b'))),\r\nmul(2,mul(variables('a'),variables('b'))))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"a": {
+				"type": "Integer",
+				"defaultValue": 5
+			},
+			"b": {
+				"type": "Integer",
+				"defaultValue": 10
+			},
+			"X": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "Practice"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-28T05:49:56Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

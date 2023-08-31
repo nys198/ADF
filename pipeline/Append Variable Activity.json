@@ -1,0 +1,62 @@
+{
+	"name": "Append Variable Activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Appending variable to a array",
+				"type": "AppendVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Marks",
+					"value": {
+						"value": "@int(90)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Assigning append variable output to temp variable",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Appending variable to a array",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "temp",
+					"value": {
+						"value": "@variables('Marks')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Marks": {
+				"type": "Array",
+				"defaultValue": [
+					89,
+					50,
+					78,
+					40
+				]
+			},
+			"temp": {
+				"type": "Array",
+				"defaultValue": []
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-21T13:48:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

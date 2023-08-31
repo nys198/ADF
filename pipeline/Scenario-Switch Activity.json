@@ -1,0 +1,142 @@
+{
+	"name": "Scenario-Switch Activity",
+	"properties": {
+		"description": "There are four slabs, slab 1 to4 . slab 1 is less than 200, slab 2 is between 200 to 300, slab 3 is between 300 to 400 and slab 4 is \tgretaer than 400. unit price in slab 1 is 5 and in second is 7 and in third is 7 and in fourth is 11. calculate current bill.",
+		"activities": [
+			{
+				"name": "Calculate Current bill based on slab",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@if(lessOrEquals(pipeline().parameters.Units,200),'Slab1',\nif(lessOrEquals(pipeline().parameters.Units,300),'Slab2',\nif(lessOrEquals(pipeline().parameters.Units,400),'Slab3',\nif(greater(pipeline().parameters.Units,400),'Slab4','0'))))",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "Slab1",
+							"activities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Current_Bill",
+										"value": {
+											"value": "@mul(pipeline().parameters.Units,variables('unitprice1'))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "Slab2",
+							"activities": [
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Current_Bill",
+										"value": {
+											"value": "@add(mul(200,variables('unitprice1')),\nmul(sub(pipeline().parameters.Units,200),variables('unitprice2')))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "Slab3",
+							"activities": [
+								{
+									"name": "Set variable3",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Current_Bill",
+										"value": {
+											"value": "@add(add(mul(200,variables('unitprice1')),\nmul(100,variables('unitprice2'))),\nmul(sub(pipeline().parameters.Units,300),variables('unitprice3')))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "Slab4",
+							"activities": [
+								{
+									"name": "Set variable4",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Current_Bill",
+										"value": {
+											"value": "@add(mul(sub(pipeline().parameters.Units,200),variables('unitprice4')),2600)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"Units": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"unitprice1": {
+				"type": "Integer",
+				"defaultValue": 5
+			},
+			"unitprice2": {
+				"type": "Integer",
+				"defaultValue": 7
+			},
+			"unitprice3": {
+				"type": "Integer",
+				"defaultValue": 9
+			},
+			"unitprice4": {
+				"type": "Integer",
+				"defaultValue": 11
+			},
+			"Current_Bill": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "Scenarios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T14:43:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

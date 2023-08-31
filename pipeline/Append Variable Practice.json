@@ -1,0 +1,64 @@
+{
+	"name": "Append Variable Practice",
+	"properties": {
+		"activities": [
+			{
+				"name": "Append 90 to the array",
+				"type": "AppendVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Marks",
+					"value": {
+						"value": "@int(90)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Append 90 to the array",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "X",
+					"value": {
+						"value": "@variables('Marks')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Marks": {
+				"type": "Array",
+				"defaultValue": [
+					12,
+					15,
+					19,
+					24
+				]
+			},
+			"X": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "Practice"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-28T06:15:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

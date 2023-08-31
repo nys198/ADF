@@ -1,0 +1,194 @@
+{
+	"name": "Emp_Names_Until",
+	"properties": {
+		"activities": [
+			{
+				"name": "get emp table details",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select * from emp",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "sqlEMPTable",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "get emp table details",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(variables('Var X'),sub(activity('get emp table details').output.count,1))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Initialize variable",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set temp",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Ename",
+								"value": {
+									"value": "@activity('get emp table details').output.value[variables('temp')].ename",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set temp",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "temp",
+								"value": {
+									"value": "@variables('Var X')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Increase value by 1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Assigning those Enames to Array",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var X",
+								"value": {
+									"value": "@add(variables('temp'),1)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Assigning those Enames to Array",
+							"type": "AppendVariable",
+							"dependsOn": [
+								{
+									"activity": "Initialize variable",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Ename_Array",
+								"value": {
+									"value": "@variables('Ename')",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "display Ename Array",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Until1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Final_Array",
+					"value": {
+						"value": "@variables('Ename_Array')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"Var X": {
+				"type": "Integer",
+				"defaultValue": 0
+			},
+			"Table_Array": {
+				"type": "Array"
+			},
+			"table": {
+				"type": "Array"
+			},
+			"temp": {
+				"type": "Integer"
+			},
+			"Ename": {
+				"type": "String"
+			},
+			"Ename_Array": {
+				"type": "Array"
+			},
+			"Final_Array": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "Scenarios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:14:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

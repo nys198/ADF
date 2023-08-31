@@ -1,0 +1,82 @@
+{
+	"name": "Scenario-If activity",
+	"properties": {
+		"description": "what will be the current bill, if units are less than 200 then unit price 5 , if units are greater than 200 then unit price is 7.",
+		"activities": [
+			{
+				"name": "check how many units consumed",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(pipeline().parameters.units,200)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Set variable2",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Current_Bill",
+								"value": {
+									"value": "@mul(sub(200,pipeline().parameters.units),variables('unitprice1'))",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Current_Bill",
+								"value": {
+									"value": "@add(mul(200,variables('unitprice1')),mul(sub(pipeline().parameters.units,200),variables('unitprice2')))",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"units": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"unitprice1": {
+				"type": "Integer",
+				"defaultValue": 5
+			},
+			"unitprice2": {
+				"type": "Integer",
+				"defaultValue": 7
+			},
+			"Current_Bill": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "Scenarios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T14:15:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

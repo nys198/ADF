@@ -1,0 +1,82 @@
+{
+	"name": "Scenario2-squarecalculation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set a value",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "a",
+					"value": "10"
+				}
+			},
+			{
+				"name": "Set b value",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "b",
+					"value": "5"
+				}
+			},
+			{
+				"name": "Calculation of Squares",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set a value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set b value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "x",
+					"value": {
+						"value": "@{mul(add(int(variables('b')),int(variables('a'))),add(int(variables('b')),int(variables('a'))))}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"a": {
+				"type": "String"
+			},
+			"b": {
+				"type": "String"
+			},
+			"x": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Scenarios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T06:02:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
